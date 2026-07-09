@@ -12,6 +12,7 @@
 <style>
 @font-face{font-family:'MOGA';src:url('img/moga.otf') format('opentype');font-weight:400 900;font-display:swap}
 *{box-sizing:border-box;margin:0;padding:0}
+html{overflow-x:hidden}
 body{background:#08080a;color:#f4f1ea;font-family:'Plus Jakarta Sans',sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 img{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
@@ -38,6 +39,11 @@ a{color:inherit;text-decoration:none}
  .traj-row .traj-line{display:none!important}
  .masonry{column-count:2!important}
  .evox-masonry{column-count:2!important}
+ .nav-burger{display:flex!important}
+ .evox-tab{padding:14px 20px!important;min-height:44px}
+ [data-nav="vision"]{padding:13px 17px!important;min-height:44px;display:inline-flex!important;align-items:center}
+ .foot-link{min-height:44px;padding:11px 2px!important;display:inline-flex!important;align-items:center}
+ .lb-close{width:44px!important;height:44px!important}
 }
 @media(max-width:560px){
  .masonry,.evox-masonry{column-count:1!important}
@@ -48,6 +54,35 @@ a{color:inherit;text-decoration:none}
 }
 @media(max-width:480px){
  #evox-grid .evox-item{grid-column:span 12!important}
+ .stat-grid{grid-template-columns:1fr!important}
+}
+/* ---- Mobile nav overlay ---- */
+.nav-burger{appearance:none;-webkit-appearance:none;display:none;align-items:center;justify-content:center;width:40px;height:40px;min-width:44px;min-height:44px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);cursor:pointer;flex:none;padding:0;margin:0 2px}
+.nav-burger:active{background:rgba(255,255,255,.12)}
+.mobile-nav-overlay{display:none}
+@media(max-width:900px){
+ .mobile-nav-overlay{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+  position:fixed;inset:0;z-index:150;
+  background:rgba(8,8,10,.97);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);
+  opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-12px);
+  transition:opacity .35s ease,transform .35s ease,visibility 0s linear .35s;
+ }
+ .mobile-nav-overlay.open{
+  opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0);
+  transition:opacity .35s ease,transform .35s ease,visibility 0s;
+ }
+ .mobile-nav-overlay a{
+  font:600 21px/1 'Plus Jakarta Sans'!important;color:#f4f1ea;
+  padding:14px 10px;min-height:44px;display:flex;align-items:center;justify-content:center;
+  width:min(84vw,340px);text-align:center;border-radius:14px;transition:background .25s;
+ }
+ .mobile-nav-overlay a:active{background:rgba(255,255,255,.07)}
+ .mobile-nav-overlay .mnav-cta{
+  margin-top:14px;background:linear-gradient(135deg,#FF7A1A,#FF9A3D);color:#0a0a0a!important;
+  width:auto;padding:14px 30px;border-radius:100px;font-weight:700!important;
+ }
+ #nav-close{appearance:none;-webkit-appearance:none;position:absolute;top:22px;right:22px;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#f4f1ea;font:400 20px/1 'Plus Jakarta Sans';cursor:pointer}
 }
 </style>
 </helmet>
@@ -71,8 +106,28 @@ a{color:inherit;text-decoration:none}
     <a data-nav="casestudies" style="padding:8px 13px;border-radius:100px;font:500 13.5px/1 'Plus Jakarta Sans';color:rgba(244,241,234,.6);cursor:pointer;transition:color .3s">Cas clients</a>
     <a data-nav="book" style="padding:8px 13px;border-radius:100px;font:500 13.5px/1 'Plus Jakarta Sans';color:rgba(244,241,234,.6);cursor:pointer;transition:color .3s">Book</a>
   </div>
+  <button id="nav-burger" type="button" class="nav-burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobile-nav-overlay">
+    <span aria-hidden="true" style="position:relative;width:16px;height:11px;display:block">
+      <span style="position:absolute;left:0;top:0;width:100%;height:2px;border-radius:2px;background:#f4f1ea"></span>
+      <span style="position:absolute;left:0;top:4.5px;width:100%;height:2px;border-radius:2px;background:#f4f1ea"></span>
+      <span style="position:absolute;left:0;top:9px;width:100%;height:2px;border-radius:2px;background:#f4f1ea"></span>
+    </span>
+  </button>
   <a data-nav="vision" style="padding:9px 17px;border-radius:100px;background:rgba(255,122,26,.14);border:1px solid rgba(255,122,26,.4);color:#FFB36B;font:600 13px/1 'Plus Jakarta Sans';cursor:pointer;transition:background .3s">Vision</a>
 </nav>
+
+<!-- MOBILE NAV OVERLAY -->
+<div id="mobile-nav-overlay" class="mobile-nav-overlay" role="dialog" aria-modal="true" aria-label="Menu de navigation">
+  <button id="nav-close" type="button" aria-label="Fermer le menu">✕</button>
+  <a data-nav="hero">Profil</a>
+  <a data-nav="projet">Projet</a>
+  <a data-nav="master">Parcours</a>
+  <a data-nav="evox">EVOX</a>
+  <a data-nav="freelance">Freelance</a>
+  <a data-nav="casestudies">Cas clients</a>
+  <a data-nav="book">Book</a>
+  <a data-nav="vision" class="mnav-cta">Vision</a>
+</div>
 
 <!-- 01 HERO -->
 <section id="hero" data-screen-label="01 Hero" style="position:relative;z-index:2;min-height:100vh;display:flex;align-items:center;padding:120px clamp(22px,6vw,110px) 80px;scroll-margin-top:80px">
@@ -226,10 +281,10 @@ a{color:inherit;text-decoration:none}
     <div class="reveal" style="opacity:0;transform:translateY(42px);transition:opacity 1.1s cubic-bezier(.16,1,.3,1) .18s,transform 1.1s cubic-bezier(.16,1,.3,1) .18s">
       <div style="font:500 12px/1 'Plus Jakarta Sans';letter-spacing:.2em;text-transform:uppercase;color:rgba(244,241,234,.45);margin-bottom:20px">Mon terrain chez EVOX — du catalogue à la campagne</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px">
-        <div style="padding:26px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.085)"><div style="font:700 13px/1 'Plus Jakarta Sans';color:#FF8A2E;letter-spacing:.06em;margin-bottom:13px">01</div><h3 style="font:600 17px/1.25 'Plus Jakarta Sans';margin-bottom:15px">Catalogue &amp; e-commerce</h3><div style="display:flex;flex-direction:column;gap:9px"><div style="display:flex;gap:9px;align-items:flex-start;font:300 13.5px/1.45 'Plus Jakarta Sans';color:rgba(244,241,234,.6)"><span style="color:#FF8A2E;flex:none">→</span>Import de produits en masse</div><div style="display:flex;gap:9px;align-items:flex-start;font:300 13.5px/1.45 'Plus Jakarta Sans';color:rgba(244,241,234,.6)"><span style="color:#FF8A2E;flex:none">→</span>Structuration &amp; mise à jour du catalogue</div><div style="display:flex;gap:9px;align-items:flex-start;font:300 13.5px/1.45 'Plus Jakarta Sans';color:rgba(244,241,234,.6)"><span style="color:#FF8A2E;flex:none">→</span>Retouche &amp; optimisation des fiches produits</div><div style="display:flex;gap:9px;align-items:flex-start;font:300 13.5px/1.45 'Plus Jakarta Sans';color:rgba(244,241,234,.6)"><span style="color:#FF8A2E;flex:none">→</span>Descriptions SEO</div></div></div>
-        <div style="padding:26px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.085)"><div style="font:700 13px/1 'Plus Jakarta Sans';color:#FF8A2E;letter-spacing:.06em;margin-bottom:13px">02</div><h3 style="font:600 17px/1.25 'Plus Jakarta Sans';margin-bottom:15px">Visuels &amp; acquisition</h3><div style="display:flex;flex-direction:column;gap:9px"><div style="display:flex;gap:9px;align-items:flex-start;font:300 13.5px/1.45 'Plus Jakarta Sans';color:rgba(244,241,234,.6)"><span style="color:#FF8A2E;flex:none">→</span>Visuels du site e-commerce</div><div style="display:flex;gap:9px;align-items:flex-start;font:300 13.5px/1.45 'Plus Jakarta Sans';color:rgba(244,241,234,.6)"><span style="color:#FF8A2E;flex:none">→</span>Bannières promotionnelles</div><div style="display:flex;gap:9px;align-items:flex-start;font:300 13.5px/1.45 'Plus Jakarta Sans';color:rgba(244,241,234,.6)"><span style="color:#FF8A2E;flex:none">→</span>Carrousels publicitaires</div><div style="display:flex;gap:9px;align-items:flex-start;font:300 13.5px/1.45 'Plus Jakarta Sans';color:rgba(244,241,234,.6)"><span style="color:#FF8A2E;flex:none">→</span>Campagnes Meta Ads</div></div></div>
-        <div style="padding:26px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.085)"><div style="font:700 13px/1 'Plus Jakarta Sans';color:#FF8A2E;letter-spacing:.06em;margin-bottom:13px">03</div><h3 style="font:600 17px/1.25 'Plus Jakarta Sans';margin-bottom:15px">Vidéo</h3><div style="display:flex;flex-direction:column;gap:9px"><div style="display:flex;gap:9px;align-items:flex-start;font:300 13.5px/1.45 'Plus Jakarta Sans';color:rgba(244,241,234,.6)"><span style="color:#FF8A2E;flex:none">→</span>Vidéos promotionnelles</div><div style="display:flex;gap:9px;align-items:flex-start;font:300 13.5px/1.45 'Plus Jakarta Sans';color:rgba(244,241,234,.6)"><span style="color:#FF8A2E;flex:none">→</span>Prise de vue</div><div style="display:flex;gap:9px;align-items:flex-start;font:300 13.5px/1.45 'Plus Jakarta Sans';color:rgba(244,241,234,.6)"><span style="color:#FF8A2E;flex:none">→</span>Montage vidéo</div></div></div>
-        <div style="padding:26px;border-radius:18px;background:linear-gradient(135deg,rgba(255,122,26,.14),rgba(255,122,26,.04));border:1px solid rgba(255,122,26,.3)"><div style="font:700 13px/1 'Plus Jakarta Sans';color:#FFB36B;letter-spacing:.06em;margin-bottom:13px">04</div><h3 style="font:600 17px/1.25 'Plus Jakarta Sans';margin-bottom:15px;color:#FFD9B0">Opérations commerciales</h3><div style="display:flex;flex-direction:column;gap:9px"><div style="display:flex;gap:9px;align-items:flex-start;font:300 13.5px/1.45 'Plus Jakarta Sans';color:rgba(255,217,176,.72)"><span style="color:#FFB36B;flex:none">→</span>Black Friday</div><div style="display:flex;gap:9px;align-items:flex-start;font:300 13.5px/1.45 'Plus Jakarta Sans';color:rgba(255,217,176,.72)"><span style="color:#FFB36B;flex:none">→</span>Soldes</div><div style="display:flex;gap:9px;align-items:flex-start;font:300 13.5px/1.45 'Plus Jakarta Sans';color:rgba(255,217,176,.72)"><span style="color:#FFB36B;flex:none">→</span>Événements</div><div style="display:flex;gap:9px;align-items:flex-start;font:300 13.5px/1.45 'Plus Jakarta Sans';color:rgba(255,217,176,.72)"><span style="color:#FFB36B;flex:none">→</span>Promotions</div></div></div>
+        <div style="padding:26px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.085)"><div style="font:700 13px/1 'Plus Jakarta Sans';color:#FF8A2E;letter-spacing:.06em;margin-bottom:13px">01</div><h3 style="font:600 17px/1.25 'Plus Jakarta Sans';margin-bottom:15px">Catalogue &amp; e-commerce</h3><div style="display:flex;flex-direction:column;gap:9px"><div style="display:flex;gap:9px;align-items:flex-start;font:300 14.5px/1.45 'Plus Jakarta Sans';color:rgba(244,241,234,.6)"><span style="color:#FF8A2E;flex:none">→</span>Import de produits en masse</div><div style="display:flex;gap:9px;align-items:flex-start;font:300 14.5px/1.45 'Plus Jakarta Sans';color:rgba(244,241,234,.6)"><span style="color:#FF8A2E;flex:none">→</span>Structuration &amp; mise à jour du catalogue</div><div style="display:flex;gap:9px;align-items:flex-start;font:300 14.5px/1.45 'Plus Jakarta Sans';color:rgba(244,241,234,.6)"><span style="color:#FF8A2E;flex:none">→</span>Retouche &amp; optimisation des fiches produits</div><div style="display:flex;gap:9px;align-items:flex-start;font:300 14.5px/1.45 'Plus Jakarta Sans';color:rgba(244,241,234,.6)"><span style="color:#FF8A2E;flex:none">→</span>Descriptions SEO</div></div></div>
+        <div style="padding:26px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.085)"><div style="font:700 13px/1 'Plus Jakarta Sans';color:#FF8A2E;letter-spacing:.06em;margin-bottom:13px">02</div><h3 style="font:600 17px/1.25 'Plus Jakarta Sans';margin-bottom:15px">Visuels &amp; acquisition</h3><div style="display:flex;flex-direction:column;gap:9px"><div style="display:flex;gap:9px;align-items:flex-start;font:300 14.5px/1.45 'Plus Jakarta Sans';color:rgba(244,241,234,.6)"><span style="color:#FF8A2E;flex:none">→</span>Visuels du site e-commerce</div><div style="display:flex;gap:9px;align-items:flex-start;font:300 14.5px/1.45 'Plus Jakarta Sans';color:rgba(244,241,234,.6)"><span style="color:#FF8A2E;flex:none">→</span>Bannières promotionnelles</div><div style="display:flex;gap:9px;align-items:flex-start;font:300 14.5px/1.45 'Plus Jakarta Sans';color:rgba(244,241,234,.6)"><span style="color:#FF8A2E;flex:none">→</span>Carrousels publicitaires</div><div style="display:flex;gap:9px;align-items:flex-start;font:300 14.5px/1.45 'Plus Jakarta Sans';color:rgba(244,241,234,.6)"><span style="color:#FF8A2E;flex:none">→</span>Campagnes Meta Ads</div></div></div>
+        <div style="padding:26px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.085)"><div style="font:700 13px/1 'Plus Jakarta Sans';color:#FF8A2E;letter-spacing:.06em;margin-bottom:13px">03</div><h3 style="font:600 17px/1.25 'Plus Jakarta Sans';margin-bottom:15px">Vidéo</h3><div style="display:flex;flex-direction:column;gap:9px"><div style="display:flex;gap:9px;align-items:flex-start;font:300 14.5px/1.45 'Plus Jakarta Sans';color:rgba(244,241,234,.6)"><span style="color:#FF8A2E;flex:none">→</span>Vidéos promotionnelles</div><div style="display:flex;gap:9px;align-items:flex-start;font:300 14.5px/1.45 'Plus Jakarta Sans';color:rgba(244,241,234,.6)"><span style="color:#FF8A2E;flex:none">→</span>Prise de vue</div><div style="display:flex;gap:9px;align-items:flex-start;font:300 14.5px/1.45 'Plus Jakarta Sans';color:rgba(244,241,234,.6)"><span style="color:#FF8A2E;flex:none">→</span>Montage vidéo</div></div></div>
+        <div style="padding:26px;border-radius:18px;background:linear-gradient(135deg,rgba(255,122,26,.14),rgba(255,122,26,.04));border:1px solid rgba(255,122,26,.3)"><div style="font:700 13px/1 'Plus Jakarta Sans';color:#FFB36B;letter-spacing:.06em;margin-bottom:13px">04</div><h3 style="font:600 17px/1.25 'Plus Jakarta Sans';margin-bottom:15px;color:#FFD9B0">Opérations commerciales</h3><div style="display:flex;flex-direction:column;gap:9px"><div style="display:flex;gap:9px;align-items:flex-start;font:300 14.5px/1.45 'Plus Jakarta Sans';color:rgba(255,217,176,.72)"><span style="color:#FFB36B;flex:none">→</span>Black Friday</div><div style="display:flex;gap:9px;align-items:flex-start;font:300 14.5px/1.45 'Plus Jakarta Sans';color:rgba(255,217,176,.72)"><span style="color:#FFB36B;flex:none">→</span>Soldes</div><div style="display:flex;gap:9px;align-items:flex-start;font:300 14.5px/1.45 'Plus Jakarta Sans';color:rgba(255,217,176,.72)"><span style="color:#FFB36B;flex:none">→</span>Événements</div><div style="display:flex;gap:9px;align-items:flex-start;font:300 14.5px/1.45 'Plus Jakarta Sans';color:rgba(255,217,176,.72)"><span style="color:#FFB36B;flex:none">→</span>Promotions</div></div></div>
       </div>
       <div style="margin-top:34px;padding:clamp(28px,4vw,46px);border-radius:22px;background:linear-gradient(135deg,rgba(255,122,26,.1),rgba(255,255,255,.02));border:1px solid rgba(255,122,26,.22);text-align:center">
         <p style="max-width:760px;margin:0 auto;font:600 clamp(21px,2.5vw,32px)/1.35 'Plus Jakarta Sans';color:#f4f1ea">Le Master m'a donné la <span style="color:#FF8A2E">méthode</span>, EVOX m'a donné le <span style="color:#FF8A2E">terrain</span>, et le freelance m'a donné la <span style="color:#FF8A2E">responsabilité</span>.</p>
@@ -374,14 +429,14 @@ a{color:inherit;text-decoration:none}
     <div class="reveal" style="opacity:0;transform:translateY(42px);transition:opacity 1.1s cubic-bezier(.16,1,.3,1) .1s,transform 1.1s cubic-bezier(.16,1,.3,1) .1s;margin-top:clamp(40px,6vh,72px)">
       <div style="font:500 12px/1 'Plus Jakarta Sans';letter-spacing:.2em;text-transform:uppercase;color:rgba(244,241,234,.45);margin-bottom:20px">Compétences métier</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px">
-        <div style="padding:22px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.085)"><div style="width:8px;height:8px;border-radius:50%;background:#FF8A2E;margin-bottom:14px"></div><h3 style="font:600 16px/1.25 'Plus Jakarta Sans';margin-bottom:7px">Gestion de projet</h3><p style="font:300 13.5px/1.55 'Plus Jakarta Sans';color:rgba(244,241,234,.55)">Cadrer un brief, tenir les délais, livrer propre.</p></div>
-        <div style="padding:22px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.085)"><div style="width:8px;height:8px;border-radius:50%;background:#FF8A2E;margin-bottom:14px"></div><h3 style="font:600 16px/1.25 'Plus Jakarta Sans';margin-bottom:7px">Relation client</h3><p style="font:300 13.5px/1.55 'Plus Jakarta Sans';color:rgba(244,241,234,.55)">Écouter, rassurer, traduire une demande en solution.</p></div>
-        <div style="padding:22px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.085)"><div style="width:8px;height:8px;border-radius:50%;background:#FF8A2E;margin-bottom:14px"></div><h3 style="font:600 16px/1.25 'Plus Jakarta Sans';margin-bottom:7px">Analyse d'un besoin</h3><p style="font:300 13.5px/1.55 'Plus Jakarta Sans';color:rgba(244,241,234,.55)">Comprendre l'objectif réel derrière la demande.</p></div>
-        <div style="padding:22px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.085)"><div style="width:8px;height:8px;border-radius:50%;background:#FF8A2E;margin-bottom:14px"></div><h3 style="font:600 16px/1.25 'Plus Jakarta Sans';margin-bottom:7px">Autonomie</h3><p style="font:300 13.5px/1.55 'Plus Jakarta Sans';color:rgba(244,241,234,.55)">Avancer seul, de l'idée au fichier final.</p></div>
-        <div style="padding:22px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.085)"><div style="width:8px;height:8px;border-radius:50%;background:#FF8A2E;margin-bottom:14px"></div><h3 style="font:600 16px/1.25 'Plus Jakarta Sans';margin-bottom:7px">Organisation</h3><p style="font:300 13.5px/1.55 'Plus Jakarta Sans';color:rgba(244,241,234,.55)">Prioriser, structurer, ne rien laisser au hasard.</p></div>
-        <div style="padding:22px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.085)"><div style="width:8px;height:8px;border-radius:50%;background:#FF8A2E;margin-bottom:14px"></div><h3 style="font:600 16px/1.25 'Plus Jakarta Sans';margin-bottom:7px">Compréhension business</h3><p style="font:300 13.5px/1.55 'Plus Jakarta Sans';color:rgba(244,241,234,.55)">Penser vente, marge et cible, pas juste esthétique.</p></div>
-        <div style="padding:22px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.085)"><div style="width:8px;height:8px;border-radius:50%;background:#FF8A2E;margin-bottom:14px"></div><h3 style="font:600 16px/1.25 'Plus Jakarta Sans';margin-bottom:7px">Cohérence de marque</h3><p style="font:300 13.5px/1.55 'Plus Jakarta Sans';color:rgba(244,241,234,.55)">Un même univers sur tous les points de contact.</p></div>
-        <div style="padding:22px;border-radius:18px;background:linear-gradient(135deg,rgba(255,122,26,.14),rgba(255,122,26,.04));border:1px solid rgba(255,122,26,.3)"><div style="width:8px;height:8px;border-radius:50%;background:#FFB36B;margin-bottom:14px"></div><h3 style="font:600 16px/1.25 'Plus Jakarta Sans';margin-bottom:7px;color:#FFD9B0">Adaptation aux contraintes</h3><p style="font:300 13.5px/1.55 'Plus Jakarta Sans';color:rgba(255,217,176,.62)">Budget, support, timing : je fais avec, et bien.</p></div>
+        <div style="padding:22px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.085)"><div style="width:8px;height:8px;border-radius:50%;background:#FF8A2E;margin-bottom:14px"></div><h3 style="font:600 16px/1.25 'Plus Jakarta Sans';margin-bottom:7px">Gestion de projet</h3><p style="font:300 14.5px/1.55 'Plus Jakarta Sans';color:rgba(244,241,234,.55)">Cadrer un brief, tenir les délais, livrer propre.</p></div>
+        <div style="padding:22px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.085)"><div style="width:8px;height:8px;border-radius:50%;background:#FF8A2E;margin-bottom:14px"></div><h3 style="font:600 16px/1.25 'Plus Jakarta Sans';margin-bottom:7px">Relation client</h3><p style="font:300 14.5px/1.55 'Plus Jakarta Sans';color:rgba(244,241,234,.55)">Écouter, rassurer, traduire une demande en solution.</p></div>
+        <div style="padding:22px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.085)"><div style="width:8px;height:8px;border-radius:50%;background:#FF8A2E;margin-bottom:14px"></div><h3 style="font:600 16px/1.25 'Plus Jakarta Sans';margin-bottom:7px">Analyse d'un besoin</h3><p style="font:300 14.5px/1.55 'Plus Jakarta Sans';color:rgba(244,241,234,.55)">Comprendre l'objectif réel derrière la demande.</p></div>
+        <div style="padding:22px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.085)"><div style="width:8px;height:8px;border-radius:50%;background:#FF8A2E;margin-bottom:14px"></div><h3 style="font:600 16px/1.25 'Plus Jakarta Sans';margin-bottom:7px">Autonomie</h3><p style="font:300 14.5px/1.55 'Plus Jakarta Sans';color:rgba(244,241,234,.55)">Avancer seul, de l'idée au fichier final.</p></div>
+        <div style="padding:22px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.085)"><div style="width:8px;height:8px;border-radius:50%;background:#FF8A2E;margin-bottom:14px"></div><h3 style="font:600 16px/1.25 'Plus Jakarta Sans';margin-bottom:7px">Organisation</h3><p style="font:300 14.5px/1.55 'Plus Jakarta Sans';color:rgba(244,241,234,.55)">Prioriser, structurer, ne rien laisser au hasard.</p></div>
+        <div style="padding:22px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.085)"><div style="width:8px;height:8px;border-radius:50%;background:#FF8A2E;margin-bottom:14px"></div><h3 style="font:600 16px/1.25 'Plus Jakarta Sans';margin-bottom:7px">Compréhension business</h3><p style="font:300 14.5px/1.55 'Plus Jakarta Sans';color:rgba(244,241,234,.55)">Penser vente, marge et cible, pas juste esthétique.</p></div>
+        <div style="padding:22px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.085)"><div style="width:8px;height:8px;border-radius:50%;background:#FF8A2E;margin-bottom:14px"></div><h3 style="font:600 16px/1.25 'Plus Jakarta Sans';margin-bottom:7px">Cohérence de marque</h3><p style="font:300 14.5px/1.55 'Plus Jakarta Sans';color:rgba(244,241,234,.55)">Un même univers sur tous les points de contact.</p></div>
+        <div style="padding:22px;border-radius:18px;background:linear-gradient(135deg,rgba(255,122,26,.14),rgba(255,122,26,.04));border:1px solid rgba(255,122,26,.3)"><div style="width:8px;height:8px;border-radius:50%;background:#FFB36B;margin-bottom:14px"></div><h3 style="font:600 16px/1.25 'Plus Jakarta Sans';margin-bottom:7px;color:#FFD9B0">Adaptation aux contraintes</h3><p style="font:300 14.5px/1.55 'Plus Jakarta Sans';color:rgba(255,217,176,.62)">Budget, support, timing : je fais avec, et bien.</p></div>
       </div>
     </div>
   </div>
@@ -451,12 +506,12 @@ a{color:inherit;text-decoration:none}
             <div>
               <div style="font:600 12px/1 'Plus Jakarta Sans';letter-spacing:.2em;text-transform:uppercase;color:rgba(244,241,234,.45);margin-bottom:14px">Supports réalisés</div>
               <div style="display:flex;flex-direction:column;gap:10px">
-                <div style="display:flex;gap:10px;align-items:flex-start;font:400 13.5px/1.4 'Plus Jakarta Sans';color:rgba(244,241,234,.72)"><span style="color:#FF6B6B;flex:none;font-weight:700">✦</span>Identité visuelle &amp; logo</div>
-                <div style="display:flex;gap:10px;align-items:flex-start;font:400 13.5px/1.4 'Plus Jakarta Sans';color:rgba(244,241,234,.72)"><span style="color:#FF6B6B;flex:none;font-weight:700">✦</span>Menu boards TV (4 écrans)</div>
-                <div style="display:flex;gap:10px;align-items:flex-start;font:400 13.5px/1.4 'Plus Jakarta Sans';color:rgba(244,241,234,.72)"><span style="color:#FF6B6B;flex:none;font-weight:700">✦</span>Enseigne &amp; façade en situation</div>
-                <div style="display:flex;gap:10px;align-items:flex-start;font:400 13.5px/1.4 'Plus Jakarta Sans';color:rgba(244,241,234,.72)"><span style="color:#FF6B6B;flex:none;font-weight:700">✦</span>Menus diffusés sur écrans réels</div>
-                <div style="display:flex;gap:10px;align-items:flex-start;font:400 13.5px/1.4 'Plus Jakarta Sans';color:rgba(244,241,234,.72)"><span style="color:#FF6B6B;flex:none;font-weight:700">✦</span>Visuels promotionnels</div>
-                <div style="display:flex;gap:10px;align-items:flex-start;font:400 13.5px/1.4 'Plus Jakarta Sans';color:rgba(244,241,234,.72)"><span style="color:#FF6B6B;flex:none;font-weight:700">✦</span>Page Uber Eats</div>
+                <div style="display:flex;gap:10px;align-items:flex-start;font:400 14.5px/1.4 'Plus Jakarta Sans';color:rgba(244,241,234,.72)"><span style="color:#FF6B6B;flex:none;font-weight:700">✦</span>Identité visuelle &amp; logo</div>
+                <div style="display:flex;gap:10px;align-items:flex-start;font:400 14.5px/1.4 'Plus Jakarta Sans';color:rgba(244,241,234,.72)"><span style="color:#FF6B6B;flex:none;font-weight:700">✦</span>Menu boards TV (4 écrans)</div>
+                <div style="display:flex;gap:10px;align-items:flex-start;font:400 14.5px/1.4 'Plus Jakarta Sans';color:rgba(244,241,234,.72)"><span style="color:#FF6B6B;flex:none;font-weight:700">✦</span>Enseigne &amp; façade en situation</div>
+                <div style="display:flex;gap:10px;align-items:flex-start;font:400 14.5px/1.4 'Plus Jakarta Sans';color:rgba(244,241,234,.72)"><span style="color:#FF6B6B;flex:none;font-weight:700">✦</span>Menus diffusés sur écrans réels</div>
+                <div style="display:flex;gap:10px;align-items:flex-start;font:400 14.5px/1.4 'Plus Jakarta Sans';color:rgba(244,241,234,.72)"><span style="color:#FF6B6B;flex:none;font-weight:700">✦</span>Visuels promotionnels</div>
+                <div style="display:flex;gap:10px;align-items:flex-start;font:400 14.5px/1.4 'Plus Jakarta Sans';color:rgba(244,241,234,.72)"><span style="color:#FF6B6B;flex:none;font-weight:700">✦</span>Page Uber Eats</div>
               </div>
             </div>
           </div>
@@ -553,13 +608,13 @@ a{color:inherit;text-decoration:none}
             <div>
               <div style="font:600 12px/1 'Plus Jakarta Sans';letter-spacing:.2em;text-transform:uppercase;color:rgba(244,241,234,.45);margin-bottom:14px">Supports réalisés</div>
               <div style="display:flex;flex-direction:column;gap:10px">
-                <div style="display:flex;gap:10px;align-items:flex-start;font:400 13.5px/1.4 'Plus Jakarta Sans';color:rgba(244,241,234,.72)"><span style="color:#FFB36B;flex:none;font-weight:700">✦</span>Identité visuelle</div>
-                <div style="display:flex;gap:10px;align-items:flex-start;font:400 13.5px/1.4 'Plus Jakarta Sans';color:rgba(244,241,234,.72)"><span style="color:#FFB36B;flex:none;font-weight:700">✦</span>Menu boards TV &amp; borne de commande</div>
-                <div style="display:flex;gap:10px;align-items:flex-start;font:400 13.5px/1.4 'Plus Jakarta Sans';color:rgba(244,241,234,.72)"><span style="color:#FFB36B;flex:none;font-weight:700">✦</span>Enseigne &amp; façade en situation</div>
-                <div style="display:flex;gap:10px;align-items:flex-start;font:400 13.5px/1.4 'Plus Jakarta Sans';color:rgba(244,241,234,.72)"><span style="color:#FFB36B;flex:none;font-weight:700">✦</span>Menus diffusés sur écrans réels</div>
-                <div style="display:flex;gap:10px;align-items:flex-start;font:400 13.5px/1.4 'Plus Jakarta Sans';color:rgba(244,241,234,.72)"><span style="color:#FFB36B;flex:none;font-weight:700">✦</span>Packaging (sachets, wraps)</div>
-                <div style="display:flex;gap:10px;align-items:flex-start;font:400 13.5px/1.4 'Plus Jakarta Sans';color:rgba(244,241,234,.72)"><span style="color:#FFB36B;flex:none;font-weight:700">✦</span>Supports digitaux &amp; promotionnels</div>
-                <div style="display:flex;gap:10px;align-items:flex-start;font:400 13.5px/1.4 'Plus Jakarta Sans';color:rgba(244,241,234,.72)"><span style="color:#FFB36B;flex:none;font-weight:700">✦</span>Page Uber Eats</div>
+                <div style="display:flex;gap:10px;align-items:flex-start;font:400 14.5px/1.4 'Plus Jakarta Sans';color:rgba(244,241,234,.72)"><span style="color:#FFB36B;flex:none;font-weight:700">✦</span>Identité visuelle</div>
+                <div style="display:flex;gap:10px;align-items:flex-start;font:400 14.5px/1.4 'Plus Jakarta Sans';color:rgba(244,241,234,.72)"><span style="color:#FFB36B;flex:none;font-weight:700">✦</span>Menu boards TV &amp; borne de commande</div>
+                <div style="display:flex;gap:10px;align-items:flex-start;font:400 14.5px/1.4 'Plus Jakarta Sans';color:rgba(244,241,234,.72)"><span style="color:#FFB36B;flex:none;font-weight:700">✦</span>Enseigne &amp; façade en situation</div>
+                <div style="display:flex;gap:10px;align-items:flex-start;font:400 14.5px/1.4 'Plus Jakarta Sans';color:rgba(244,241,234,.72)"><span style="color:#FFB36B;flex:none;font-weight:700">✦</span>Menus diffusés sur écrans réels</div>
+                <div style="display:flex;gap:10px;align-items:flex-start;font:400 14.5px/1.4 'Plus Jakarta Sans';color:rgba(244,241,234,.72)"><span style="color:#FFB36B;flex:none;font-weight:700">✦</span>Packaging (sachets, wraps)</div>
+                <div style="display:flex;gap:10px;align-items:flex-start;font:400 14.5px/1.4 'Plus Jakarta Sans';color:rgba(244,241,234,.72)"><span style="color:#FFB36B;flex:none;font-weight:700">✦</span>Supports digitaux &amp; promotionnels</div>
+                <div style="display:flex;gap:10px;align-items:flex-start;font:400 14.5px/1.4 'Plus Jakarta Sans';color:rgba(244,241,234,.72)"><span style="color:#FFB36B;flex:none;font-weight:700">✦</span>Page Uber Eats</div>
               </div>
             </div>
           </div>
@@ -683,10 +738,10 @@ a{color:inherit;text-decoration:none}
       <span style="height:1px;flex:1;background:rgba(255,255,255,.08)"></span>
     </div>
     <div class="reveal stat-grid" style="opacity:0;transform:translateY(42px);transition:opacity 1.1s cubic-bezier(.16,1,.3,1) .16s,transform 1.1s cubic-bezier(.16,1,.3,1) .16s;display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
-      <div style="padding:28px 24px;border-radius:20px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.085)"><div contenteditable="true" spellcheck="false" style="font:700 clamp(38px,4vw,52px)/1 'MOGA';color:#FF8A2E;letter-spacing:-.02em;outline:none">6</div><div style="font:400 13.5px/1.45 'Plus Jakarta Sans';color:rgba(244,241,234,.58);margin-top:12px">Projets clients majeurs</div></div>
-      <div style="padding:28px 24px;border-radius:20px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.085)"><div contenteditable="true" spellcheck="false" style="font:700 clamp(38px,4vw,52px)/1 'MOGA';color:#FF8A2E;letter-spacing:-.02em;outline:none">40+</div><div style="font:400 13.5px/1.45 'Plus Jakarta Sans';color:rgba(244,241,234,.58);margin-top:12px">Supports réalisés</div></div>
-      <div style="padding:28px 24px;border-radius:20px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.085)"><div contenteditable="true" spellcheck="false" style="font:700 clamp(38px,4vw,52px)/1 'MOGA';color:#FF8A2E;letter-spacing:-.02em;outline:none">12</div><div style="font:400 13.5px/1.45 'Plus Jakarta Sans';color:rgba(244,241,234,.58);margin-top:12px">Réalisations EVOX sélectionnées</div></div>
-      <div style="padding:28px 24px;border-radius:20px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.085)"><div contenteditable="true" spellcheck="false" style="font:700 clamp(38px,4vw,52px)/1 'MOGA';color:#FF8A2E;letter-spacing:-.02em;outline:none">8</div><div style="font:400 13.5px/1.45 'Plus Jakarta Sans';color:rgba(244,241,234,.58);margin-top:12px">Types de supports livrés</div></div>
+      <div style="padding:28px 24px;border-radius:20px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.085)"><div contenteditable="true" spellcheck="false" style="font:700 clamp(38px,4vw,52px)/1 'MOGA';color:#FF8A2E;letter-spacing:-.02em;outline:none">6</div><div style="font:400 14px/1.45 'Plus Jakarta Sans';color:rgba(244,241,234,.58);margin-top:12px">Projets clients majeurs</div></div>
+      <div style="padding:28px 24px;border-radius:20px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.085)"><div contenteditable="true" spellcheck="false" style="font:700 clamp(38px,4vw,52px)/1 'MOGA';color:#FF8A2E;letter-spacing:-.02em;outline:none">40+</div><div style="font:400 14px/1.45 'Plus Jakarta Sans';color:rgba(244,241,234,.58);margin-top:12px">Supports réalisés</div></div>
+      <div style="padding:28px 24px;border-radius:20px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.085)"><div contenteditable="true" spellcheck="false" style="font:700 clamp(38px,4vw,52px)/1 'MOGA';color:#FF8A2E;letter-spacing:-.02em;outline:none">12</div><div style="font:400 14px/1.45 'Plus Jakarta Sans';color:rgba(244,241,234,.58);margin-top:12px">Réalisations EVOX sélectionnées</div></div>
+      <div style="padding:28px 24px;border-radius:20px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.085)"><div contenteditable="true" spellcheck="false" style="font:700 clamp(38px,4vw,52px)/1 'MOGA';color:#FF8A2E;letter-spacing:-.02em;outline:none">8</div><div style="font:400 14px/1.45 'Plus Jakarta Sans';color:rgba(244,241,234,.58);margin-top:12px">Types de supports livrés</div></div>
     </div>
   </div>
 </section>
@@ -788,11 +843,11 @@ a{color:inherit;text-decoration:none}
         <span style="font:500 13px/1.4 'Plus Jakarta Sans';color:rgba(244,241,234,.45)">Ibrahim Bousaadoun<br>Designer Graphique · Paris</span>
       </div>
       <div style="display:flex;flex-wrap:wrap;align-items:center;gap:22px">
-        <a href="mailto:itsbnss@gmail.com" style="font:500 13.5px/1 'Plus Jakarta Sans';color:rgba(244,241,234,.6)">itsbnss@gmail.com</a>
-        <a href="tel:0755329577" style="font:500 13.5px/1 'Plus Jakarta Sans';color:rgba(244,241,234,.6)">07 55 32 95 77</a>
-        <a href="https://www.instagram.com/jeune.designerr" target="_blank" rel="noopener" style="font:500 13.5px/1 'Plus Jakarta Sans';color:rgba(244,241,234,.6)">Instagram</a>
-        <a href="https://www.behance.net/ibrahimbousaad2" target="_blank" rel="noopener" style="font:500 13.5px/1 'Plus Jakarta Sans';color:rgba(244,241,234,.6)">Behance</a>
-        <a href="https://www.tiktok.com/@jeune.designer" target="_blank" rel="noopener" style="font:500 13.5px/1 'Plus Jakarta Sans';color:rgba(244,241,234,.6)">TikTok</a>
+        <a href="mailto:itsbnss@gmail.com" class="foot-link" style="font:500 14px/1 'Plus Jakarta Sans';color:rgba(244,241,234,.6)">itsbnss@gmail.com</a>
+        <a href="tel:0755329577" class="foot-link" style="font:500 14px/1 'Plus Jakarta Sans';color:rgba(244,241,234,.6)">07 55 32 95 77</a>
+        <a href="https://www.instagram.com/jeune.designerr" target="_blank" rel="noopener" class="foot-link" style="font:500 14px/1 'Plus Jakarta Sans';color:rgba(244,241,234,.6)">Instagram</a>
+        <a href="https://www.behance.net/ibrahimbousaad2" target="_blank" rel="noopener" class="foot-link" style="font:500 14px/1 'Plus Jakarta Sans';color:rgba(244,241,234,.6)">Behance</a>
+        <a href="https://www.tiktok.com/@jeune.designer" target="_blank" rel="noopener" class="foot-link" style="font:500 14px/1 'Plus Jakarta Sans';color:rgba(244,241,234,.6)">TikTok</a>
       </div>
     </div>
     <div style="max-width:1280px;margin:30px auto 0;font:400 12px/1 'Plus Jakarta Sans';color:rgba(244,241,234,.3)">© 2026 Ibrahim Bousaadoun — Tous droits réservés.</div>
@@ -802,7 +857,7 @@ a{color:inherit;text-decoration:none}
 <!-- LIGHTBOX -->
 <div id="lightbox" style="position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:5vh 5vw;background:rgba(5,5,7,.9);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);opacity:0;pointer-events:none;transition:opacity .4s ease;cursor:zoom-out">
   <img id="lightbox-img" alt="" style="max-width:100%;max-height:90vh;border-radius:12px;box-shadow:0 30px 90px rgba(0,0,0,.7);object-fit:contain">
-  <div style="position:absolute;top:24px;right:28px;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);font:400 22px/1 'Plus Jakarta Sans';color:#f4f1ea">✕</div>
+  <div class="lb-close" style="position:absolute;top:24px;right:28px;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);font:400 22px/1 'Plus Jakarta Sans';color:#f4f1ea">✕</div>
 </div>
 
 </div>
@@ -880,6 +935,31 @@ document.addEventListener("DOMContentLoaded", function () {
     root.querySelectorAll('[data-scroll]').forEach(a => {
       a.addEventListener('click', (ev) => { ev.preventDefault(); scrollTo(a.getAttribute('data-scroll')); });
     });
+
+    // ---- Mobile nav overlay ----
+    const burger = root.getElementById('nav-burger');
+    const navOverlay = root.getElementById('mobile-nav-overlay');
+    const navCloseBtn = root.getElementById('nav-close');
+    if (burger && navOverlay) {
+      const openMenu = () => {
+        navOverlay.classList.add('open');
+        burger.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+      };
+      const closeMenu = () => {
+        navOverlay.classList.remove('open');
+        burger.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      };
+      burger.addEventListener('click', () => {
+        navOverlay.classList.contains('open') ? closeMenu() : openMenu();
+      });
+      if (navCloseBtn) navCloseBtn.addEventListener('click', closeMenu);
+      navOverlay.addEventListener('click', (ev) => { if (ev.target === navOverlay) closeMenu(); });
+      navOverlay.querySelectorAll('[data-nav]').forEach(a => a.addEventListener('click', closeMenu));
+      window.addEventListener('keydown', (ev) => { if (ev.key === 'Escape') closeMenu(); });
+      window.addEventListener('resize', () => { if (window.innerWidth > 900) closeMenu(); });
+    }
 
     // ---- Ambient glow parallax ----
     const glow = root.getElementById('ambient-glow');
