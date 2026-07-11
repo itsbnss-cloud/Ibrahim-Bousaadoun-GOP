@@ -181,20 +181,30 @@ a{color:inherit;text-decoration:none}
     </div>
     <div class="hero-photo-wrap reveal" style="opacity:0;transform:translateY(42px);transition:opacity 1.3s cubic-bezier(.16,1,.3,1) .2s,transform 1.3s cubic-bezier(.16,1,.3,1) .2s;position:relative">
       <div style="position:absolute;inset:-12% -6% -6% -2%;border-radius:50%;background:radial-gradient(circle at 62% 42%,rgba(255,122,26,.5),rgba(255,90,20,.14) 46%,transparent 68%);filter:blur(16px);z-index:0;animation:pulseGlow 7s ease-in-out infinite"></div>
-      <div style="position:relative;z-index:1;border-radius:26px;overflow:hidden;border:1px solid rgba(255,255,255,.1);box-shadow:0 40px 100px rgba(0,0,0,.6)">
-        <img src="img/ibrahim-photo.jpg" alt="Ibrahim Bousaadoun" style="width:100%;height:auto;object-fit:cover">
-        <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(8,8,10,.55))"></div>
-        <div style="position:absolute;left:18px;bottom:16px;display:flex;align-items:center;gap:10px;padding:9px 14px;border-radius:100px;background:rgba(12,10,9,.5);border:1px solid rgba(255,255,255,.12);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)">
-          <span style="font:600 12px/1 'Plus Jakarta Sans';letter-spacing:.06em;color:#f4f1ea">Paris · FR</span>
-          <span style="width:4px;height:4px;border-radius:50%;background:rgba(244,241,234,.4)"></span>
-          <span style="font:500 12px/1 'Plus Jakarta Sans';color:rgba(244,241,234,.6)">Jeune Designer</span>
+      <div style="position:relative;z-index:1;perspective:1800px">
+        <div id="hero-flip-inner" style="position:relative;width:100%;aspect-ratio:4/5;transition:transform 1s cubic-bezier(.16,1,.3,1);transform-style:preserve-3d">
+          <!-- FRONT: photo -->
+          <div style="position:absolute;inset:0;border-radius:26px;overflow:hidden;border:1px solid rgba(255,255,255,.1);box-shadow:0 40px 100px rgba(0,0,0,.6);backface-visibility:hidden;-webkit-backface-visibility:hidden">
+            <img src="img/ibrahim-photo.jpg" alt="Ibrahim Bousaadoun" style="width:100%;height:100%;object-fit:cover">
+            <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(8,8,10,.55))"></div>
+            <div style="position:absolute;left:18px;bottom:16px;display:flex;align-items:center;gap:10px;padding:9px 14px;border-radius:100px;background:rgba(12,10,9,.5);border:1px solid rgba(255,255,255,.12);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)">
+              <span style="font:600 12px/1 'Plus Jakarta Sans';letter-spacing:.06em;color:#f4f1ea">Paris · FR</span>
+              <span style="width:4px;height:4px;border-radius:50%;background:rgba(244,241,234,.4)"></span>
+              <span style="font:500 12px/1 'Plus Jakarta Sans';color:rgba(244,241,234,.6)">Jeune Designer</span>
+            </div>
+            <button id="hero-video-btn" type="button" style="appearance:none;-webkit-appearance:none;position:absolute;top:16px;right:16px;display:flex;align-items:center;gap:8px;padding:8px 14px 8px 8px;border-radius:100px;background:rgba(12,10,9,.55);border:1px solid rgba(255,255,255,.14);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);cursor:pointer;font:600 12px/1 'Plus Jakarta Sans';color:#f4f1ea">
+              <span style="display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#FF7A1A,#FF9A3D);flex:none">
+                <svg width="10" height="12" viewBox="0 0 10 12" fill="#0a0a0a"><path d="M0 0L10 6L0 12V0Z"></path></svg>
+              </span>
+              Voir la vidéo
+            </button>
+          </div>
+          <!-- BACK: video -->
+          <div style="position:absolute;inset:0;border-radius:26px;overflow:hidden;border:1px solid rgba(255,255,255,.1);box-shadow:0 40px 100px rgba(0,0,0,.6);backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:rotateY(180deg);background:#000">
+            <video id="hero-flip-video" playsinline controls style="width:100%;height:100%;object-fit:cover;display:block"></video>
+            <button id="hero-flip-close" type="button" aria-label="Fermer la vidéo" style="appearance:none;-webkit-appearance:none;position:absolute;top:16px;right:16px;width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:rgba(12,10,9,.55);border:1px solid rgba(255,255,255,.14);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);cursor:pointer;color:#f4f1ea;font:400 16px/1 'Plus Jakarta Sans'">✕</button>
+          </div>
         </div>
-        <button id="hero-video-btn" type="button" style="appearance:none;-webkit-appearance:none;position:absolute;top:16px;right:16px;display:flex;align-items:center;gap:8px;padding:8px 14px 8px 8px;border-radius:100px;background:rgba(12,10,9,.55);border:1px solid rgba(255,255,255,.14);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);cursor:pointer;font:600 12px/1 'Plus Jakarta Sans';color:#f4f1ea">
-          <span style="display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#FF7A1A,#FF9A3D);flex:none">
-            <svg width="10" height="12" viewBox="0 0 10 12" fill="#0a0a0a"><path d="M0 0L10 6L0 12V0Z"></path></svg>
-          </span>
-          Voir la vidéo
-        </button>
       </div>
     </div>
   </div>
@@ -908,7 +918,6 @@ a{color:inherit;text-decoration:none}
 <!-- LIGHTBOX -->
 <div id="lightbox" style="position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:5vh 5vw;background:rgba(5,5,7,.9);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);opacity:0;pointer-events:none;transition:opacity .4s ease;cursor:zoom-out">
   <img id="lightbox-img" alt="" style="max-width:100%;max-height:90vh;border-radius:12px;box-shadow:0 30px 90px rgba(0,0,0,.7);object-fit:contain">
-  <video id="lightbox-video" playsinline controls style="display:none;max-width:100%;max-height:90vh;border-radius:12px;box-shadow:0 30px 90px rgba(0,0,0,.7);cursor:default"></video>
   <div class="lb-close" style="position:absolute;top:24px;right:28px;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);font:400 22px/1 'Plus Jakarta Sans';color:#f4f1ea">✕</div>
 </div>
 
@@ -1148,40 +1157,39 @@ a{color:inherit;text-decoration:none}
     // ---- Lightbox ----
     const lb = root.getElementById('lightbox');
     const lbImg = root.getElementById('lightbox-img');
-    const lbVideo = root.getElementById('lightbox-video');
     root.querySelectorAll('.shot').forEach(s => {
       s.addEventListener('click', () => {
         const img = s.querySelector('img');
         if (!img) return;
-        lbVideo.pause();
-        lbVideo.style.display = 'none';
-        lbImg.style.display = '';
         lbImg.setAttribute('src', img.getAttribute('src'));
         lb.style.opacity = '1';
         lb.style.pointerEvents = 'auto';
       });
     });
-    const closeLb = () => {
-      lb.style.opacity = '0';
-      lb.style.pointerEvents = 'none';
-      lbVideo.pause();
-    };
+    const closeLb = () => { lb.style.opacity = '0'; lb.style.pointerEvents = 'none'; };
     lb.addEventListener('click', closeLb);
-    lbVideo.addEventListener('click', (ev) => ev.stopPropagation());
     window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLb(); });
 
-    // ---- Hero intro video ----
+    // ---- Hero flip card (photo <-> intro video) ----
     const heroVideoBtn = root.getElementById('hero-video-btn');
-    if (heroVideoBtn && lb && lbVideo) {
-      heroVideoBtn.addEventListener('click', () => {
-        lbImg.style.display = 'none';
-        lbVideo.style.display = 'block';
-        if (!lbVideo.getAttribute('src')) lbVideo.setAttribute('src', 'video/gop-intro.mp4');
-        lb.style.opacity = '1';
-        lb.style.pointerEvents = 'auto';
-        lbVideo.currentTime = 0;
-        lbVideo.play().catch(() => {});
+    const heroFlipClose = root.getElementById('hero-flip-close');
+    const heroFlipInner = root.getElementById('hero-flip-inner');
+    const heroFlipVideo = root.getElementById('hero-flip-video');
+    if (heroVideoBtn && heroFlipInner && heroFlipVideo) {
+      if (prefersReducedMotion) heroFlipInner.style.transition = 'none';
+      heroVideoBtn.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        if (!heroFlipVideo.getAttribute('src')) heroFlipVideo.setAttribute('src', 'video/gop-intro.mp4');
+        heroFlipInner.style.transform = 'rotateY(180deg)';
+        heroFlipVideo.currentTime = 0;
+        heroFlipVideo.play().catch(() => {});
       });
+      const flipBack = () => {
+        heroFlipInner.style.transform = 'none';
+        heroFlipVideo.pause();
+      };
+      if (heroFlipClose) heroFlipClose.addEventListener('click', (ev) => { ev.stopPropagation(); flipBack(); });
+      window.addEventListener('keydown', (ev) => { if (ev.key === 'Escape') flipBack(); });
     }
 
     // ---- EVOX caption on hover ----
